@@ -3,14 +3,15 @@ import newsModel from "../../model/news/index.js";
 const newsController = {
   Add: async (req, res) => {
     const { newsTitle, newsPicture, newsContent } = req.body;
-    const {path}=req.file
+    const { path } = req.file;
     try {
       await newsModel.create({
         newsTitle,
-         newsPicture:path,
-          newsContent,
-          // memberId : req.session.member.id,
-          // adminId : req.session.admin.id
+        newsPicture: path,
+        newsContent,
+        // memberId : req.session.member.id,
+        // adminId : req.session.admin.id
+        //testing
       });
       res.status(201).json({ message: "Added  successfully" });
     } catch (error) {
@@ -19,28 +20,27 @@ const newsController = {
   },
   findall: async (req, res) => {
     try {
-      const response = await newsModel.findAll(
-        {include:[newsCommentsModel]}
-      );
+      const response = await newsModel.findAll({
+        include: [newsCommentsModel],
+      });
       res.json(response);
     } catch (error) {
-      res.json(error)
+      res.json(error);
     }
   },
   update: async (req, res) => {
     try {
       const { id } = req.params;
-      const {  newsTitle,newsPicture,newsContent, } = req.body;
-    
+      const { newsTitle, newsPicture, newsContent } = req.body;
+
       const response = await newsModel.findOne({
-        where: { id},
+        where: { id },
       });
       if (!response) {
         res.status(400).json({ message: "news not found" });
       } else {
-
         await newsModel.update(
-          { newsTitle,newsPicture,newsContent, },
+          { newsTitle, newsPicture, newsContent },
           { where: { id } }
         );
         res.json({ message: " Updated successfully" });
@@ -53,8 +53,8 @@ const newsController = {
     const { id } = req.params;
     try {
       const response = await newsModel.findOne({
-        where: { id},
-        include:{newsCommentsModel}
+        where: { id },
+        include: { newsCommentsModel },
       });
       res.status(200).json({ response, message: "event found successfully" });
     } catch (error) {
@@ -75,25 +75,23 @@ const newsController = {
       console.log(error);
     }
   },
-  updatelikes:async(req,res)=>{
-    
+  updatelikes: async (req, res) => {
     try {
-        const {totalLikes}=req.body
-        const{id} =req.params
-        const data= await newsModel.findOne({
-          where:{id}
-        })
-        if(!data){
-          res.status(404).json({messsaga:"News not found"})
-        }
-         await newsModel.update({totalLikes},{where:{id}})
-        
-         res.json({message:"successfullty updated"}) 
-      } catch (error) {
-        res.json({message:error})
-       
+      const { totalLikes } = req.body;
+      const { id } = req.params;
+      const data = await newsModel.findOne({
+        where: { id },
+      });
+      if (!data) {
+        res.status(404).json({ messsaga: "News not found" });
       }
-  }
+      await newsModel.update({ totalLikes }, { where: { id } });
+
+      res.json({ message: "successfullty updated" });
+    } catch (error) {
+      res.json({ message: error });
+    }
+  },
 };
 
 export default newsController;
