@@ -11,7 +11,7 @@ const newsController = {
         newsContent,
         // memberId : req.session.member.id,
         // adminId : req.session.admin.id
-        //testing
+        //testing 2
       });
       res.status(201).json({ message: "Added  successfully" });
     } catch (error) {
